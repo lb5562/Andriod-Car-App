@@ -18,21 +18,33 @@ public class JoyStick extends SurfaceView implements SurfaceHolder.Callback, Vie
      private float centerY;
     private float baseRad;
     private float hatRad;
+    private JoyStickListener callBack;
+
+
     public JoyStick(Context context){
         super(context);
         getHolder().addCallback(this);
         setOnTouchListener(this);
+        if(context instanceof  JoyStickListener){
+            callBack = (JoyStickListener) context;
+        }
     }
 
     public JoyStick(Context context,AttributeSet attributes,int style){
         super(context,attributes,style);
         getHolder().addCallback(this);
         setOnTouchListener(this);
+        if(context instanceof  JoyStickListener){
+            callBack = (JoyStickListener) context;
+        }
     }
     public JoyStick(Context context,AttributeSet set){
         super(context,set);
         getHolder().addCallback(this);
         setOnTouchListener(this);
+        if(context instanceof  JoyStickListener){
+            callBack = (JoyStickListener) context;
+        }
     }
 
     private void drawJoyStick(float cordX,float cordY){
@@ -77,18 +89,26 @@ public class JoyStick extends SurfaceView implements SurfaceHolder.Callback, Vie
     //changes the display of the joycon based upon touch position
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-         if(view.equals(this)){
-             float displayment = (float) Math.sqrt((Math.pow(motionEvent.getX()-centerX,2))+Math.pow(motionEvent.getY()-centerY,2));
-             if(displayment < baseRad){
-                 float r = baseRad/displayment;
-                 float conX = centerX +(motionEvent.getX()-centerX)*r;
-                 float conY = centerY +(motionEvent.getY()-centerY)*r;
-                 drawJoyStick(conX, conY);
-             }else {
+         if(view.equals(this)) {
+             if (motionEvent.getAction() != motionEvent.ACTION_UP) {
+                 float displayment = (float) Math.sqrt((Math.pow(motionEvent.getX() - centerX, 2)) + Math.pow(motionEvent.getY() - centerY, 2));
+                 if (displayment < baseRad) {
+                     callBack.onJoystickMoved((motionEvent.getX() - centerX) / baseRad, (motionEvent.getY() - centerY) / baseRad, getId());
+                     drawJoyStick(motionEvent.getX(), motionEvent.getY());
+                 } else {
+                     float r = baseRad / displayment;
+                     float conX = centerX + (motionEvent.getX() - centerX) * r;
+                     float conY = centerY + (motionEvent.getY() - centerY) * r;
+                     drawJoyStick(conX, conY);
+                     callBack.onJoystickMoved((conX - centerX) / baseRad, (conY - centerY) / baseRad, getId());
+                 }
+             } else {
                  //set boundries
-                 drawJoyStick(centerX,centerY);
+                 drawJoyStick(centerX, centerY);
+                 callBack.onJoystickMoved(0, 0, getId());
+
              }
-        }
+         }
         return  true;
     }
 }

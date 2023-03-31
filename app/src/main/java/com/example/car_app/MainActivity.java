@@ -6,6 +6,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.navigation.NavController;
@@ -18,7 +19,7 @@ import com.example.car_app.databinding.ActivityMainBinding;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements JoyStickListener {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
@@ -47,7 +48,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         */
+
     }
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -76,5 +81,10 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onJoystickMoved(float xPercent, float yPercent, int source) {
+        Log.d("X Percent:"+xPercent," Y percent:" + yPercent);
     }
 }
