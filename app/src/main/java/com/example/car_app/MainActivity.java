@@ -27,9 +27,9 @@ public class MainActivity extends AppCompatActivity implements JoyStickListener 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        JoyStick joy = new JoyStick(this);
-        setContentView(joy);
+        setContentView(R.layout.activity_main);
+        //JoyStick joy = new JoyStick(this);
+        //setContentView(joy);
        /* binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -84,7 +84,12 @@ public class MainActivity extends AppCompatActivity implements JoyStickListener 
     }
 
     @Override
-    public void onJoystickMoved(float xPercent, float yPercent, int source) {
-        Log.d("X Percent:"+xPercent," Y percent:" + yPercent);
-    }
+    public void onJoystickMoved(float xPercent, float yPercent, int id) {
+        if(id==R.id.joyStickLeft){
+                Log.d("Left: X Percent:" + xPercent, " Y percent:" + yPercent);
+        } else if(id ==R.id.joyStickRight){
+                Log.d("Right: X Percent:" + xPercent, " Y percent:" + yPercent);
+
+        }
+        }
 }

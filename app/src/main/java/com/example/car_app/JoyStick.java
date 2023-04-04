@@ -74,6 +74,8 @@ public class JoyStick extends SurfaceView implements SurfaceHolder.Callback, Vie
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
         setUp();
+        drawJoyStick(centerX,centerY);
+
     }
 
     @Override
