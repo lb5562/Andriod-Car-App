@@ -3,3 +3,6 @@
 Current Technology used:
   - JDK 17
   - API 21 21 Lollipop 5.0
+
+Updates
+  - 4/6 : Added more double joycons in landscape
