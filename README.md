@@ -6,3 +6,4 @@ Current Technology used:
 
 Updates
   - 4/6 : Added more double joycons in landscape
+  - 4/11 : Added Bluetooth premission
