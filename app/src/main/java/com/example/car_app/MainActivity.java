@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements JoyStickListener 
             if (!adapter.isEnabled()) {
                 Intent enable = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 //Intent check = new Intent(BluetoothAdapter.STATE_DISCONNECTED);
-                startActivityForResult(enable,0);
+                startActivityForResult(enable, 0);
             }
 
             @SuppressLint("MissingPermission") Set bonding = adapter.getBondedDevices();
@@ -124,26 +124,22 @@ public class MainActivity extends AppCompatActivity implements JoyStickListener 
             } else {
                 for (Object it : bonding) {
                     if (it instanceof BluetoothDevice) {
-                        if (((BluetoothDevice) it).getAddress().equals(DEVICE_ADDRESS)) {
+                        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                            return;
+                        }
+                        if (((BluetoothDevice) it).getName().equals("Arduino Uno")) {
                             adino = (BluetoothDevice) it;
                             connection = true;
 
                             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                                // TODO: Consider calling
-                                //    ActivityCompat#requestPermissions
-                                // here to request the missing permissions, and then overriding
-                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                //                                          int[] grantResults)
-                                // to handle the case where the user grants the permission. See the documentation
-                                // for ActivityCompat#requestPermissions for more details.
                                 return;
                             }
                             socket = adino.createRfcommSocketToServiceRecord(PORT_UUID);
-                                socket.connect();
-                                text.append(device.ge);
-                                socketSetUP();
-                                break;
-                            }
+                            socket.connect();
+                            text.append(adino.getName());
+                            socketSetUP();
+                            break;
+                        }
                         }
                     }
                 }
