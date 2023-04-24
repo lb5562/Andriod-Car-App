@@ -5,6 +5,7 @@ import android.app.Instrumentation;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.usb.UsbDevice;
@@ -28,20 +29,30 @@ import com.example.car_app.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity implements JoyStickListener {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
     private UsbManager usbManager;
+    private final UUID PORT_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");//Serial Port Service ID
     private BluetoothDevice adino;
     private Boolean connection;
-    private int DEVICE_ADDRESS =0;
+    private int DEVICE_ADDRESS = 0;
+    private BluetoothSocket socket;
+    private OutputStream output;
+    private InputStream input;
+    TextView text;
 
 
     @Override
@@ -94,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements JoyStickListener 
         return super.onOptionsItemSelected(item);
     }
 
-    public void onClickConnect(View view) {
+    public void onClickConnect(View view) throws IOException {
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
         if (adapter == null) {
             Toast.makeText(getApplicationContext(), "Device doesnt Support Bluetooth", Toast.LENGTH_SHORT).show();
@@ -102,26 +113,50 @@ public class MainActivity extends AppCompatActivity implements JoyStickListener 
         } else {
             if (!adapter.isEnabled()) {
                 Intent enable = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                registerForActivityResult(enable, new Intent(BluetoothAdapter.STATE_DISCONNECTED));
+                //Intent check = new Intent(BluetoothAdapter.STATE_DISCONNECTED);
+                startActivityForResult(enable,0);
+            }
+
+            @SuppressLint("MissingPermission") Set bonding = adapter.getBondedDevices();
+            if (bonding.isEmpty()) {
+                Toast.makeText(getApplicationContext(), "Please Pair the Device", Toast.LENGTH_SHORT).show();
+
             } else {
-                }
-                @SuppressLint("MissingPermission") Set bonding = adapter.getBondedDevices();
-                if(bonding.isEmpty()){
-                    Toast.makeText(getApplicationContext(),"Please Pair the Device",Toast.LENGTH_SHORT).show();
-                }else{
-                    for(Object it:bonding){
-                        if(it instanceof  BluetoothDevice){
-                        if(((BluetoothDevice) it).getAddress().equals(DEVICE_ADDRESS){
+                for (Object it : bonding) {
+                    if (it instanceof BluetoothDevice) {
+                        if (((BluetoothDevice) it).getAddress().equals(DEVICE_ADDRESS)) {
                             adino = (BluetoothDevice) it;
                             connection = true;
-                            break;
+
+                            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                                // TODO: Consider calling
+                                //    ActivityCompat#requestPermissions
+                                // here to request the missing permissions, and then overriding
+                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                //                                          int[] grantResults)
+                                // to handle the case where the user grants the permission. See the documentation
+                                // for ActivityCompat#requestPermissions for more details.
+                                return;
+                            }
+                            socket = adino.createRfcommSocketToServiceRecord(PORT_UUID);
+                                socket.connect();
+                                text.append(device.ge);
+                                socketSetUP();
+                                break;
+                            }
                         }
-                    }
                     }
                 }
 
             }
 
+        }
+
+
+
+        private void socketSetUP() throws IOException {
+            output= socket.getOutputStream();
+            input = socket.getInputStream();
         }
 
     @Override
@@ -137,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements JoyStickListener 
                 Log.d("Left: X Percent:" + xPercent, " Y percent:" + yPercent);
         } else if(id ==R.id.joyStickRight){
                 Log.d("Right: X Percent:" + xPercent, " Y percent:" + yPercent);
-
+    //output.write(text);
         }
         }
 }
