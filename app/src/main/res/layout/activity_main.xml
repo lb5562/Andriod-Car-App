@@ -9,19 +9,62 @@
     tools:context=".MainActivity">
 
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/Theme.CarApp.AppBarOverlay">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+
+        <RelativeLayout
+
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.CarApp.PopupOverlay" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+            android:layout_height="match_parent"
+
+            tools:context=".MainActivity">
+
+            <EditText
+
+                android:id="@+id/editText"
+
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+
+                android:layout_alignParentStart="true"
+
+                android:layout_alignParentLeft="true"
+
+                android:layout_alignParentTop="true"
+
+                android:layout_alignParentEnd="true"
+
+                android:layout_alignParentRight="true" />
+
+            <Button
+
+                android:id="@+id/buttonStart"
+
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+
+                android:layout_alignParentStart="true"
+
+                android:layout_alignParentLeft="true"
+
+
+                android:text="Connect"
+                android:backgroundTint="@color/cardview_light_background"
+                android:textColor="@color/black"
+                android:onClick="onClickConnect"
+                />
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/Theme.CarApp.PopupOverlay" />
+        </RelativeLayout>
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,17 +74,18 @@
 
         <com.example.car_app.JoyStick
             android:id="@+id/joyStickLeft"
-            android:layout_marginTop="53dp"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
+            android:layout_marginTop="53dp"
             android:layout_weight="1" />
 
         <com.example.car_app.JoyStick
             android:id="@+id/joyStickRight"
-            android:layout_marginTop="53dp"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
+            android:layout_marginTop="53dp"
             android:layout_weight="1" />
+
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
