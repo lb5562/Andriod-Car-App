@@ -58,10 +58,10 @@ public class MainActivity extends AppCompatActivity implements JoyStickListener 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.activity_main);
         //JoyStick joy = new JoyStick(this);
         //setContentView(joy);
-       /* binding = ActivityMainBinding.inflate(getLayoutInflater());
+       binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements JoyStickListener 
             }
         });
 
-        */
+
 
     }
 
